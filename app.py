@@ -23,7 +23,6 @@ from cleaner import (
     fix_invalid_num_types
 )
 
-# Streamlit-only visual styling. All original functions below remain unchanged.
 st.set_page_config(page_title="Data Quality Inspector", page_icon="🔎", layout="wide", initial_sidebar_state="collapsed")
 
 
@@ -179,7 +178,7 @@ def invalid_emails_section(df):
 
 
 
-
+#from validator.py
 def data_validator(df):
     choice = st.selectbox (
             "Select Validator", options=[
@@ -222,7 +221,7 @@ def data_validator(df):
 
 
 
-
+#from reports.py
 def data_reports(df):
     choice = st.selectbox("Select Report:", 
                           options=["Duplicate Report",
@@ -307,7 +306,8 @@ def data_reports(df):
             st.metric("Affected Rows", affected_rows_emails)
             st.metric("Invalid Email Values", total_invalid_emails_cells)
             st.metric("% of Invalid Emails", f"{round(percent_of_invalid_emails, 2)}%")
-        
+
+#from cleaner.py
 def data_cleaner(df):
     choice = st.selectbox("Choose Method: ", options=([
         "Remove Duplicates",
@@ -345,7 +345,7 @@ def data_cleaner(df):
             st.dataframe(cleaned_df)
         
     
-
+#UI
 if "page" not in st.session_state:
     st.session_state["page"] = "home"
 button_home, button_validator, button_reports, button_cleaner = home_ui()
