@@ -16,12 +16,6 @@ from reports import (
     business_rules_report,
     invalid_emails_report
 )
-from cleaner import (
-    remove_duplicates,
-    fill_missing_values,
-    fix_invalid_date_types,
-    fix_invalid_num_types
-)
 
 # Streamlit-only visual styling. All original functions below remain unchanged.
 st.set_page_config(page_title="Data Quality Inspector", page_icon="🔎", layout="wide", initial_sidebar_state="collapsed")
@@ -308,42 +302,8 @@ def data_reports(df):
             st.metric("Invalid Email Values", total_invalid_emails_cells)
             st.metric("% of Invalid Emails", f"{round(percent_of_invalid_emails, 2)}%")
         
-def data_cleaner(df):
-    choice = st.selectbox("Choose Method: ", options=([
-        "Remove Duplicates",
-        "Fill Missing Values",
-        "Fix Invalid Num Types",
-        "Fix Invalid Date Types"
-    ]))
-    if choice == "Remove Duplicates":
-        columns_dupes = dupes_section(df)
-        if columns_dupes:
-            cleaned_df = remove_duplicates(df, columns_dupes)
-            st.session_state["cleaned_df"] = cleaned_df
-            st.dataframe(cleaned_df)
-    elif choice == "Fill Missing Values":
-        columns_missing = st.multiselect("Select Columns", options=df.columns, key="missing")
-        fill_method = st.selectbox("Select your fill method: ", options=(["Mean", "Median", "Mode", "Constant"]), key="fill_method")
-        selected_value = None
-        if fill_method == "Constant":
-            selected_value = st.text_input("Type the Value you want to be Filled: ")
-        if columns_missing:
-            cleaned_df = fill_missing_values(df, columns_missing, fill_method, selected_value)
-            st.session_state["cleaned_df"] = cleaned_df
-            st.dataframe(cleaned_df)
-    elif choice == "Fix Invalid Num Types":
-        columns_num = invalid_numeric_section(df)
-        if columns_num:
-            cleaned_df = fix_invalid_num_types(df, columns_num)
-            st.session_state["cleaned_df"] = cleaned_df
-            st.dataframe(cleaned_df)
-    elif choice == "Fix Invalid Date Types":
-        columns_date, date_format = invalid_date_section(df)
-        if columns_date:
-            cleaned_df = fix_invalid_date_types(df, columns_date, date_format)
-            st.session_state["cleaned_df"] = cleaned_df
-            st.dataframe(cleaned_df)
-        
+    
+            
     
 
 if "page" not in st.session_state:
@@ -372,20 +332,7 @@ if st.session_state["page"] == "reports":
         if df is not None:
             st.header("Reports")
             data_reports(df)
-if button_cleaner: 
-    st.session_state["page"] = "cleaner"
-if st.session_state["page"] == "cleaner":
-    if upload_file:
-        df = display_file(upload_file)
-        
-        if df is not None:
-            st.header("Data Cleaner")
-            if "cleaned_df" not in st.session_state:
-                st.session_state["cleaned_df"] = df.copy()
-            data_cleaner(st.session_state["cleaned_df"])
-            
-            
-                
+
     
         
     
