@@ -17,6 +17,62 @@ from reports import (
     invalid_emails_report
 )
 
+# Streamlit-only visual styling. All original functions below remain unchanged.
+st.set_page_config(page_title="Data Quality Inspector", page_icon="🔎", layout="wide", initial_sidebar_state="collapsed")
+
+
+def apply_streamlit_style():
+    st.markdown("""
+    <style>
+    /* App canvas and typography */
+    .stApp { background: linear-gradient(135deg, #f7f9fc 0%, #eef4f9 100%); color: #18283b; }
+    .block-container { max-width: 1120px; padding-top: 2.4rem; padding-bottom: 4rem; }
+    h1, h2, h3 { font-family: 'Segoe UI', Arial, sans-serif; letter-spacing: -.025em; color: #15324e; }
+    h1 { font-weight: 780; font-size: clamp(2rem, 4vw, 3rem); padding-bottom: .35rem; }
+    h2 { border-bottom: 1px solid #dbe5ed; padding-bottom: .55rem; margin-top: 1.3rem; }
+    h3 { font-weight: 680; }
+    p, label { font-family: 'Segoe UI', Arial, sans-serif; }
+
+    /* Buttons: presentation only; original button keys and behavior stay intact */
+    div.stButton > button { border-radius: 12px; border: 1px solid #c9d8e6;
+        background: #ffffff; color: #173a59; padding: .6rem 1.2rem;
+        font-weight: 650; box-shadow: 0 2px 8px rgba(20,52,80,.055);
+        transition: background-color .15s, border-color .15s, transform .15s; }
+    div.stButton > button:hover { background: #e8f2fc; border-color: #2c79ae; color: #10466c; transform: translateY(-1px); }
+    div.stButton > button:focus-visible { outline: 3px solid #8bc6f3; outline-offset: 2px; }
+
+    /* Upload box, inputs and tables */
+    [data-testid="stFileUploader"] { background: #ffffff; border: 1px solid #dce6ef;
+        border-radius: 16px; padding: 1rem 1.2rem; box-shadow: 0 5px 18px rgba(25,60,95,.045); }
+    [data-testid="stFileUploaderDropzone"] { background: #f5f9fd; border-radius: 12px; }
+    [data-testid="stSelectbox"], [data-testid="stMultiSelect"], [data-testid="stNumberInput"],
+    [data-testid="stTextInput"] { margin-bottom: .45rem; }
+    [data-testid="stDataFrame"] { border: 1px solid #dce6ef; border-radius: 12px; overflow: hidden; }
+
+    /* Reporting metric cards */
+    [data-testid="stMetric"] { background: #ffffff; border: 1px solid #dce6ef;
+        border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: .45rem;
+        box-shadow: 0 3px 14px rgba(25,60,95,.04); }
+    [data-testid="stMetricLabel"] { color: #59728a; font-weight: 600; }
+    [data-testid="stMetricValue"] { color: #153d5c; font-weight: 760; }
+
+    /* Preserve readability in dark-mode browser preferences */
+    @media (prefers-color-scheme: dark) {
+        .stApp { background: #101b29; color: #e9f1f8; }
+        h1, h2, h3 { color: #e9f1f8; }
+        div.stButton > button, [data-testid="stMetric"], [data-testid="stFileUploader"] {
+            background: #192b3c; color: #e9f1f8; border-color: #35516b; }
+        [data-testid="stMetricLabel"] { color: #b7cce0; }
+        [data-testid="stMetricValue"] { color: #f0f7ff; }
+        [data-testid="stFileUploaderDropzone"] { background: #21374b; }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
+apply_streamlit_style()
+
+
 def home_ui():
     
     st.title("Data Quality Inspector")
