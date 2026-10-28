@@ -78,7 +78,7 @@ def apply_streamlit_style():
 apply_streamlit_style()
 
 
-def home_ui():
+def buttons():
     
     st.title("Data Quality Inspector")
     button_home = st.button("Home", key="b_home")
@@ -188,6 +188,7 @@ def data_validator(df):
             "Invalid Date Type", 
             "Business Rules", 
             "Invalid Emails"])
+    
     if choice == "Duplicate Detection":
         columns_dupes = dupes_section(df)
         if columns_dupes:
@@ -203,16 +204,19 @@ def data_validator(df):
         if columns_invalid_num:
                 numeric_df, numeric_mask = find_invalid_numeric_types(df, columns_invalid_num)
                 st.dataframe(numeric_df)
+                
     elif choice == "Invalid Date Type":
         columns_invalid_dates, date_format = invalid_date_section(df)
         if columns_invalid_dates:
                 date_df, date_mask = find_invalid_date_types(df, columns_invalid_dates, date_format)
                 st.dataframe(date_df)
+                
     elif choice == "Business Rules":
         rules = business_rules_section(df)
         if rules != []:
             rules_df, rules_mask = find_invalid_business_rules(df, rules)
             st.dataframe(rules_df)
+            
     elif choice == "Invalid Emails":
         columns_invalid_emails = invalid_emails_section(df)
         if columns_invalid_emails:
@@ -315,12 +319,14 @@ def data_cleaner(df):
         "Fix Invalid Num Types",
         "Fix Invalid Date Types"
     ]))
+    
     if choice == "Remove Duplicates":
         columns_dupes = dupes_section(df)
         if columns_dupes:
             cleaned_df = remove_duplicates(df, columns_dupes)
             st.session_state["cleaned_df"] = cleaned_df
             st.dataframe(cleaned_df)
+            
     elif choice == "Fill Missing Values":
         columns_missing = st.multiselect("Select Columns", options=df.columns, key="missing")
         fill_method = st.selectbox("Select your fill method: ", options=(["Mean", "Median", "Mode", "Constant"]), key="fill_method")
@@ -331,12 +337,14 @@ def data_cleaner(df):
             cleaned_df = fill_missing_values(df, columns_missing, fill_method, selected_value)
             st.session_state["cleaned_df"] = cleaned_df
             st.dataframe(cleaned_df)
+            
     elif choice == "Fix Invalid Num Types":
         columns_num = invalid_numeric_section(df)
         if columns_num:
             cleaned_df = fix_invalid_num_types(df, columns_num)
             st.session_state["cleaned_df"] = cleaned_df
             st.dataframe(cleaned_df)
+            
     elif choice == "Fix Invalid Date Types":
         columns_date, date_format = invalid_date_section(df)
         if columns_date:
@@ -348,7 +356,8 @@ def data_cleaner(df):
 #UI
 if "page" not in st.session_state:
     st.session_state["page"] = "home"
-button_home, button_validator, button_reports, button_cleaner = home_ui()
+    
+button_home, button_validator, button_reports, button_cleaner = buttons()
 
 upload_file = file_uploader()
 if not upload_file:
@@ -363,6 +372,7 @@ if st.session_state["page"] == "validator":
         if df is not None:
             st.header("Data Validator")
             data_validator(df)
+            
 if button_reports:
     st.session_state["page"] = "reports"
 if st.session_state["page"] == "reports":
@@ -372,6 +382,7 @@ if st.session_state["page"] == "reports":
         if df is not None:
             st.header("Reports")
             data_reports(df)
+            
 if button_cleaner: 
     st.session_state["page"] = "cleaner"
 if st.session_state["page"] == "cleaner":
