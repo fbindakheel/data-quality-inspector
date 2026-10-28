@@ -1,7 +1,0 @@
-__pycache__/
-*.pyc
-.venv/
-venv/
-.env
-*.log
-data_quality_inspector_10000.csv
